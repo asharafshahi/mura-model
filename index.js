@@ -52,7 +52,7 @@ const server = http
         console.log(`AI model returned: ${result[0].data}`);
         const postProcessedData = postProcessToJson(result);
         const resultId = await aiTransactions.createResult(transactionId, serviceKey, 'test');
-        await aiTransactions.uploadResultData(resultId, postProcessedData);
+        await aiTransactions.uploadResultData(transactionId, resultId, postProcessedData);
       });
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
