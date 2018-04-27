@@ -1,0 +1,19 @@
+{
+  "name": "mura-model",
+  "version": "1.0.0",
+  "description": "Mura MSK Model with AI Marketplace Model Wrapper",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nuance/ai-marketplace-api": "git+https://github.com/asharafshahi/ai-marketplace-api.git",
+    "axios": "^0.18.0",
+    "dicom-parser": "^1.7.6",
+    "dotenv": "^5.0.1",
+    "form-data": "^2.3.2",
+    "fs-extra": "^5.0.0"
+  }
+}
