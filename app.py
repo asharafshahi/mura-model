@@ -58,7 +58,11 @@ def score_image():
 
     print("** make prediction **")
     y_pred = model.predict(image_array)
-    
+    if y_pred > 0.5:
+        prediction = "Abnormal"
+    else:
+        prediction = "Normal"
+
     print("Model score for image is: {}".format(y_pred))
 
     return jsonify(prediction)

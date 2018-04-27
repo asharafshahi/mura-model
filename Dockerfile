@@ -14,6 +14,7 @@ RUN pip install pillow
 RUN pip install scikit-image
 RUN pip install flask
 RUN pip install h5py
+RUN pip install sklearn
 
 WORKDIR /app
 COPY package.json /app
