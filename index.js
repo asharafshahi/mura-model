@@ -26,34 +26,36 @@ const server = http
         body.push(chunk);
       })
       .on('end', async () => {
-        body = Buffer.concat(body).toString();
-        const { transactionId, uris } = JSON.parse(body);
-        let studyFolder, studyUid, imageUid;
-        await Promise.all(
-          uris.map(async url => {
-            try {
-              const result = await axios.get(url, {
-                responseType: 'arraybuffer'
-              });
-              ({ studyUid, imageUid } = getUids(result.data));
-              studyFolder = `${imageRootDir}/${studyUid}`;
-              const outputFilename = `${imageRootDir}/${studyUid}/${imageUid}.dcm`;
-              fs.ensureDirSync(studyFolder);
-              fs.writeFileSync(outputFilename, result.data);
-              console.log(`Wrote file ${outputFilename}`);
-            } catch (err) {
-              console.error(err);
-            }
-          })
-        );
-        const preProcessDir = `${imageRootDir}/preprocess/${studyUid}`;
-        await preProcessToPng(studyFolder, preProcessDir);
-        const result = await runModel(preProcessDir);
-        console.log(`AI model returned: ${result[0].data}`);
-        const postProcessedData = postProcessToJson(result);
-        const resultId = await aiTransactions.createResult(transactionId, serviceKey, 'test', 'FROM_AI_SERVICE');
-        await aiTransactions.uploadResultData(transactionId, resultId, postProcessedData);
-        await aiTransactions.markTransactionStatusComplete(transactionId);
+        if (req.method.toLowerCase() === 'post') {
+          body = Buffer.concat(body).toString();
+          const { transactionId, uris } = JSON.parse(body);
+          let studyFolder, studyUid, imageUid;
+          await Promise.all(
+            uris.map(async url => {
+              try {
+                const result = await axios.get(url, {
+                  responseType: 'arraybuffer'
+                });
+                ({ studyUid, imageUid } = getUids(result.data));
+                studyFolder = `${imageRootDir}/${studyUid}`;
+                const outputFilename = `${imageRootDir}/${studyUid}/${imageUid}.dcm`;
+                fs.ensureDirSync(studyFolder);
+                fs.writeFileSync(outputFilename, result.data);
+                console.log(`Wrote file ${outputFilename}`);
+              } catch (err) {
+                console.error(err);
+              }
+            })
+          );
+          const preProcessDir = `${imageRootDir}/preprocess/${studyUid}`;
+          await preProcessToPng(studyFolder, preProcessDir);
+          const result = await runModel(preProcessDir);
+          console.log(`AI model returned: ${result[0].data}`);
+          const postProcessedData = postProcessToJson(result);
+          const resultId = await aiTransactions.createResult(transactionId, serviceKey, 'test', 'FROM_AI_SERVICE');
+          await aiTransactions.uploadResultData(transactionId, resultId, postProcessedData);
+          await aiTransactions.markTransactionStatusComplete(transactionId);
+        } 
       });
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
