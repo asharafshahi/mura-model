@@ -43,6 +43,7 @@ x = Dense(1, activation='sigmoid', name='predictions')(x)
 model = Model(inputs=base_model.input, outputs=x)
 model.load_weights(MODEL_TO_EVAL)
 model.compile(optimizer=Adam(lr=1e-3), loss=binary_crossentropy, metrics=['binary_accuracy'])
+model._make_predict_function()
 
 app = Flask(__name__)
 
