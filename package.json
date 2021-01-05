@@ -10,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@nuance/ai-marketplace-api": "git+https://github.com/asharafshahi/ai-marketplace-api.git",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "dicom-parser": "1.7.6",
     "dotenv": "^5.0.1",
     "form-data": "^2.3.2",
